@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Malla Curricular Derecho UFPSO</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f2f2f2;
+    }
+    h1 {
+      text-align: center;
+    }
+    .semestre {
+      background: #ffffff;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      padding: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .semestre h2 {
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 5px;
+    }
+    .materia {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .materia input[type="checkbox"] {
+      margin-right: 10px;
+      transform: scale(1.2);
+    }
+    .materia label {
+      cursor: pointer;
+    }
+    .aprobada label {
+      text-decoration: line-through;
+      color: green;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Malla Curricular Derecho UFPSO</h1>
+  <div id="contenedor"></div>
+
+  <script>
+    const malla = {
+      "Semestre 1": [
+        "Introducción al Derecho",
+        "Derecho Civil Parte General",
+        "Derecho Constitucional General",
+        "Derecho Romano",
+        "Comunicación Escrita y Oral",
+        "Cátedra Institucional"
+      ],
+      "Semestre 2": [
+        "Derecho Constitucional Colombiano I",
+        "Derecho Civil Bienes y Propiedad Intelectual",
+        "Derechos Humanos y DIH",
+        "Historia del Derecho Colombiano",
+        "Teoría General del Proceso",
+        "Antropología",
+        "Electiva I",
+        "Oralidad Jurídica",
+        "Inclusión y Discapacidad",
+        "Migración"
+      ]
+    };
+
+    const contenedor = document.getElementById("contenedor");
+
+    Object.entries(malla).forEach(([semestre, materias]) => {
+      const div = document.createElement("div");
+      div.className = "semestre";
+      div.innerHTML = `<h2>${semestre}</h2>`;
+
+      materias.forEach((materia, index) => {
+        const key = `${semestre}-${index}`;
+        const aprobada = localStorage.getItem(key) === "true";
+
+        const item = document.createElement("div");
+        item.className = `materia ${aprobada ? 'aprobada' : ''}`;
+
+        item.innerHTML = `
+          <input type="checkbox" id="${key}" ${aprobada ? 'checked' : ''} />
+          <label for="${key}">${materia}</label>
+        `;
+
+        item.querySelector("input").addEventListener("change", (e) => {
+          const checked = e.target.checked;
+          localStorage.setItem(key, checked);
+          item.classList.toggle("aprobada", checked);
+        });
+
+        div.appendChild(item);
+      });
+
+      contenedor.appendChild(div);
+    });
+  </script>
+</body>
+</html>
